@@ -1,6 +1,6 @@
 const Course = require("../models/Course");
 const Lecture = require("../models/Lecture");
-const { uploadToCloudinary } = require("../utils/CloudinaryUploader");
+const { uploadToCloudinary } = require("../utils/cloudinaryUploader");
 
 // Create a new lecture and add it to a course
 exports.createLecture = async (req, res) => {

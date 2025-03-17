@@ -178,14 +178,14 @@ exports.login = async (req, res) => {
     };
 
     // Set cookie for token and return success response
-    return res.cookie("token", token, options).status(200).json({
+    res.cookie("token", token, options).status(200).json({
       success: true,
       message: `User Login Success`,
       user,
     });
   } catch (error) {
     // If any error occurs during the process, return error response
-    return res.status(500).json({
+    res.status(500).json({
       success: false,
       message: error.message,
     });

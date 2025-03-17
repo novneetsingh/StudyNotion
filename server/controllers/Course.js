@@ -1,7 +1,7 @@
 const Course = require("../models/Course");
 const Category = require("../models/Category");
 const User = require("../models/User");
-const { uploadToCloudinary } = require("../utils/CloudinaryUploader");
+const { uploadToCloudinary } = require("../utils/cloudinaryUploader");
 const Lecture = require("../models/Lecture");
 
 // Function to create a new course
@@ -155,7 +155,7 @@ exports.getInstructorCourses = async (req, res) => {
     // Find all courses belonging to the instructor
     const instructorCourses = await Course.find({
       instructor: instructorId,
-    }).sort({ createdAt: -1 });
+    }).sort({ createdAt: -1 }); // Sort the courses by createdAt in descending order
 
     // Return the instructor's courses
     res.status(200).json({

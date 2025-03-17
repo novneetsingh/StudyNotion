@@ -10,12 +10,14 @@ const userRoutes = require("./routes/User");
 const profileRoutes = require("./routes/Profile");
 const courseRoutes = require("./routes/Course");
 const paymentRoutes = require("./routes/Payments");
+const notesRoutes = require("./routes/Notes");
 
 // Define port number
 const PORT = process.env.PORT || 3000;
 
 // Middleware setup
 app.use(cookieParser()); // Parse cookies
+app.use(express.json()); // Parse JSON requests
 
 // Enable CORS for all routes with credentials
 app.use(
@@ -25,12 +27,6 @@ app.use(
   })
 );
 
-app.use(express.json()); // Parse JSON requests
-
-// Connect to database and cloudinary
-require("./config/database").dbconnect(); // Connect to database
-require("./config/cloudinary").cloudinaryConnect(); // Connect to cloudinary
-
 // File upload middleware setup
 app.use(
   fileUpload({
@@ -39,11 +35,16 @@ app.use(
   })
 );
 
+// Connect to database and cloudinary
+require("./config/database").dbconnect(); // Connect to database
+require("./config/cloudinary").cloudinaryConnect(); // Connect to cloudinary
+
 // Route setup
 app.use("/auth", userRoutes); // User authentication routes
 app.use("/profile", profileRoutes); // User profile routes
 app.use("/course", courseRoutes); // Course routes
 app.use("/payment", paymentRoutes); // Payment routes
+app.use("/notes", notesRoutes); // Notes routes
 
 // Default route
 app.get("/", (req, res) => {

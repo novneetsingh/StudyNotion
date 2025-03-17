@@ -1,7 +1,6 @@
-// Import combineReducers utility from Redux Toolkit
 import { combineReducers } from "@reduxjs/toolkit";
-// Import each slice reducer
 
+// Import each slice reducer
 import courseReducer from "../slices/courseSlice";
 import profileReducer from "../slices/profileSlice";
 import viewCourseReducer from "../slices/viewCourseSlice";
