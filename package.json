@@ -16,6 +16,7 @@
     "@reduxjs/toolkit": "^2.2.3",
     "axios": "^1.6.8",
     "concurrently": "^8.2.2",
+    "lucide-react": "^0.482.0",
     "rc-table": "^7.50.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

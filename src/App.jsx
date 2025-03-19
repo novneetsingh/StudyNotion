@@ -22,6 +22,7 @@ import { setUser } from "./redux-toolkit/slices/profileSlice";
 import { logout } from "./utils/Logout";
 import ViewCourse from "./pages/ViewCourse";
 import VideoDetails from "./components/core/ViewCourse/VideoDetails";
+import UserNotes from "./components/core/Dashborad/UserNotes";
 
 const App = () => {
   const navigate = useNavigate();
@@ -92,6 +93,7 @@ const App = () => {
           {/* Route for all users */}
           <Route path="dashboard/my-profile" element={<MyProfile />} />
           <Route path="dashboard/Settings" element={<Settings />} />
+          <Route path="dashboard/my-notes" element={<UserNotes />} />
 
           {/* Route only for Instructors */}
           {user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
