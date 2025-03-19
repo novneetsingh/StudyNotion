@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { formatDate } from "../../../../utils/formatDate";
 import { copyToClipboard } from "../../../../utils/copyToClipboard";
+import EditNoteModal from "./EditNoteModal";
 
 const NotesCard = ({ note, fetchNotes }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -16,7 +17,6 @@ const NotesCard = ({ note, fetchNotes }) => {
           withCredentials: true,
         }
       );
-      toast.success("Note deleted successfully!");
       fetchNotes(); // Directly call fetchNotes after deletion
     } catch (error) {
       console.error("Error deleting note:", error);
@@ -75,6 +75,14 @@ const NotesCard = ({ note, fetchNotes }) => {
           </button>
         </div>
       </div>
+      {isEditModalOpen && (
+        <EditNoteModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          note={note}
+          fetchNotes={fetchNotes}
+        />
+      )}
     </div>
   );
 };

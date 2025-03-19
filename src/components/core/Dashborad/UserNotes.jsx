@@ -31,7 +31,7 @@ const UserNotes = () => {
 
   return (
     <div className="flex-1 flex flex-col bg-richblack-900">
-      <div className="flex-1 p-6 overflow-y-auto pb-20">
+      <div className="flex-1 overflow-y-auto pb-20">
         <AllNotes fetchNotes={fetchNotes} notes={notes} />
       </div>
       <VoiceNoteRecorder fetchNotes={fetchNotes} />

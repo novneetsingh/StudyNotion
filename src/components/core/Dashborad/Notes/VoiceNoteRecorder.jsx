@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { Mic, MicOff, Send, X } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useVoiceRecorder } from "../../../../hooks/voiceRecorder";
+import { useSelector, useDispatch } from "react-redux";
+import { setLoading } from "../../../../redux-toolkit/slices/profileSlice";
 
 const VoiceNoteRecorder = ({ fetchNotes }) => {
+  const dispatch = useDispatch();
   const { register, handleSubmit, reset } = useForm();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { loading } = useSelector((state) => state.profile);
 
   const {
     isRecording,
@@ -29,9 +32,8 @@ const VoiceNoteRecorder = ({ fetchNotes }) => {
       return;
     }
 
-    const toastId = toast.loading("Creating note...");
-
     try {
+      dispatch(setLoading(true));
       // Create a FormData object
       const formData = new FormData();
 
@@ -50,14 +52,13 @@ const VoiceNoteRecorder = ({ fetchNotes }) => {
         }
       );
 
-      toast.success("Note created successfully!", { id: toastId });
       handleReset();
       fetchNotes();
     } catch (error) {
       console.error("Error creating note:", error);
-      toast.error("Failed to create note", { id: toastId });
+      toast.error("Failed to create note");
     } finally {
-      setIsSubmitting(false);
+      dispatch(setLoading(false));
     }
   };
 
@@ -67,7 +68,7 @@ const VoiceNoteRecorder = ({ fetchNotes }) => {
   };
 
   return (
-    <div className="fixed bottom-6 left-0 right-0 z-50 flex justify-center">
+    <div className="fixed bottom-6 left-0 right-0 z-10 flex justify-end">
       <div className="bg-richblack-800 border border-richblack-700 rounded-full shadow-xl transition-all duration-300 w-auto max-w-3xl mx-4">
         <form
           onSubmit={handleSubmit(onSubmit)}
@@ -91,7 +92,7 @@ const VoiceNoteRecorder = ({ fetchNotes }) => {
                 : "bg-yellow-50 hover:bg-yellow-100 text-richblack-900"
             }`}
             title={isRecording ? "Stop Recording" : "Start Recording"}
-            disabled={isSubmitting}
+            disabled={loading}
           >
             {isRecording ? (
               <MicOff className="w-5 h-5 text-white" />
@@ -107,7 +108,7 @@ const VoiceNoteRecorder = ({ fetchNotes }) => {
               onClick={handleReset}
               className="p-3 rounded-full bg-richblack-700 hover:bg-richblack-600 transition-colors"
               title="Clear"
-              disabled={isSubmitting}
+              disabled={loading}
             >
               <X className="w-5 h-5 text-pink-200" />
             </button>
@@ -116,9 +117,9 @@ const VoiceNoteRecorder = ({ fetchNotes }) => {
           {/* Save Button */}
           <button
             type="submit"
-            disabled={!audioBlob || isSubmitting}
+            disabled={!audioBlob || loading}
             className={`p-3 rounded-full transition-colors ${
-              audioBlob && !isSubmitting
+              audioBlob && !loading
                 ? "bg-caribbeangreen-500 hover:bg-caribbeangreen-600 text-richblack-900"
                 : "bg-richblack-700 text-richblack-400 cursor-not-allowed"
             }`}

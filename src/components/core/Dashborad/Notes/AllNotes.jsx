@@ -14,8 +14,8 @@ const AllNotes = ({ fetchNotes, notes }) => {
     <div className="w-full">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-richblack-5">
-          Your Notes
+        <h1 className="text-2xl md:text-3xl font-medium text-richblack-5">
+          My Notes
         </h1>
       </div>
 
