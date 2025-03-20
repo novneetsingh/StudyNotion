@@ -1,4 +1,5 @@
 import { ACCOUNT_TYPE } from "../utils/constants";
+
 export const sidebarLinks = [
   {
     id: 1,
@@ -33,5 +34,19 @@ export const sidebarLinks = [
     path: "/dashboard/my-notes",
     type: ACCOUNT_TYPE.STUDENT,
     icon: "VscNotebook",
+  },
+  {
+    id: 6,
+    name: "Job Support",
+    path: "/dashboard/job-support",
+    type: ACCOUNT_TYPE.STUDENT,
+    icon: "VscBriefcase",
+  },
+  {
+    id: 7,
+    name: "ChatBot",
+    path: "/dashboard/chatbot",
+    type: ACCOUNT_TYPE.STUDENT,
+    icon: "VscHubot",
   },
 ];

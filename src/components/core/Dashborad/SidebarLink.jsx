@@ -1,12 +1,11 @@
-import * as Icons from "react-icons/vsc"; // Import all icons from react-icons/vsc
+import * as Icons from "react-icons/vsc";
 import { useDispatch } from "react-redux";
 import { NavLink, useLocation } from "react-router-dom";
 import { resetCourseState } from "../../../redux-toolkit/slices/courseSlice";
 
 export default function SidebarLink({ link, iconName }) {
-  // Dynamically select the icon component based on the iconName prop
   const Icon = Icons[iconName];
-  const location = useLocation(); // Get the current location
+  const location = useLocation();
   const dispatch = useDispatch();
 
   // Function to check if the current route matches the link's path

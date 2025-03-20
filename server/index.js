@@ -35,9 +35,9 @@ app.use(
   })
 );
 
-// Connect to database and cloudinary
 require("./config/database").dbconnect(); // Connect to database
 require("./config/cloudinary").cloudinaryConnect(); // Connect to cloudinary
+require("./utils/jobScrapper").jobScraper(); // Connect to job scraper
 
 // Route setup
 app.use("/auth", userRoutes); // User authentication routes

@@ -23,6 +23,8 @@ import { logout } from "./utils/Logout";
 import ViewCourse from "./pages/ViewCourse";
 import VideoDetails from "./components/core/ViewCourse/VideoDetails";
 import UserNotes from "./components/core/Dashborad/UserNotes";
+import JobSupport from "./components/core/Dashborad/JobSupport";
+import ChatBot from "./components/core/Dashborad/ChatBot";
 
 const App = () => {
   const navigate = useNavigate();
@@ -92,13 +94,15 @@ const App = () => {
         >
           {/* Route for all users */}
           <Route path="dashboard/my-profile" element={<MyProfile />} />
+
           <Route path="dashboard/Settings" element={<Settings />} />
-          <Route path="dashboard/my-notes" element={<UserNotes />} />
+          
 
           {/* Route only for Instructors */}
           {user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
             <>
               <Route path="dashboard/my-courses" element={<MyCourses />} />
+
               <Route path="dashboard/add-course" element={<AddCourse />} />
             </>
           )}
@@ -110,6 +114,12 @@ const App = () => {
                 path="dashboard/enrolled-courses"
                 element={<StudentEnrolledCourses />}
               />
+
+              <Route path="dashboard/my-notes" element={<UserNotes />} />
+
+              <Route path="dashboard/job-support" element={<JobSupport />} />
+
+              <Route path="dashboard/chatbot" element={<ChatBot />} />
             </>
           )}
         </Route>
