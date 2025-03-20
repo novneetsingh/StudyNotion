@@ -34,7 +34,7 @@ exports.jobScraper = () => {
               .find(".row-1-item.locations span")
               .text()
               .trim(),
-            salary: $(element).find(".mobile").text().trim(),
+            salary: $(element).find(".desktop").text().trim(),
           };
 
           // if job details is not present then continue

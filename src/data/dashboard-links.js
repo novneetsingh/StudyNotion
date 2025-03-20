@@ -33,7 +33,7 @@ export const sidebarLinks = [
     name: "My Notes",
     path: "/dashboard/my-notes",
     type: ACCOUNT_TYPE.STUDENT,
-    icon: "VscNotebook",
+    icon: "VscNote",
   },
   {
     id: 6,

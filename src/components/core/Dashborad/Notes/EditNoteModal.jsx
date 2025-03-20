@@ -138,7 +138,12 @@ const EditNoteModal = ({ note, isOpen, onClose, fetchNotes }) => {
             {/*current images*/}
             <div className="grid grid-cols-4 gap-4 mt-4">
               {note?.images?.map((image, index) => (
-                <a key={index} href={image} target="_blank">
+                <a
+                  key={index}
+                  href={image}
+                  target="_blank"
+                  rel="noopener noreferrerr"
+                >
                   <img
                     src={image}
                     alt={`Note image ${index + 1}`}

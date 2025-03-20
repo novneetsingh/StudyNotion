@@ -11,6 +11,7 @@ const profileRoutes = require("./routes/Profile");
 const courseRoutes = require("./routes/Course");
 const paymentRoutes = require("./routes/Payments");
 const notesRoutes = require("./routes/Notes");
+const jobRoutes = require("./routes/Job");
 
 // Define port number
 const PORT = process.env.PORT || 3000;
@@ -45,6 +46,7 @@ app.use("/profile", profileRoutes); // User profile routes
 app.use("/course", courseRoutes); // Course routes
 app.use("/payment", paymentRoutes); // Payment routes
 app.use("/notes", notesRoutes); // Notes routes
+app.use("/jobs", jobRoutes); // Job routes
 
 // Default route
 app.get("/", (req, res) => {

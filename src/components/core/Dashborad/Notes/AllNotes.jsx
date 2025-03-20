@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import NotesCard from "./NotesCard";
-import { useSelector } from "react-redux";
 import { FileText } from "lucide-react";
+import { useSelector } from "react-redux";
 
 const AllNotes = ({ fetchNotes, notes }) => {
   const { loading } = useSelector((state) => state.profile);
@@ -9,6 +9,14 @@ const AllNotes = ({ fetchNotes, notes }) => {
   useEffect(() => {
     fetchNotes();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="grid min-h-screen place-items-center bg-richblack-900">
+        <div className="spinner">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
@@ -20,11 +28,7 @@ const AllNotes = ({ fetchNotes, notes }) => {
       </div>
 
       {/* Notes Grid */}
-      {loading ? (
-        <div className="flex justify-center items-center h-40">
-          <div className="spinner"></div>
-        </div>
-      ) : notes.length === 0 ? (
+      {notes.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-center">
           <div className="bg-richblack-700 p-5 rounded-full mb-4">
             <FileText className="w-10 h-10 text-yellow-50" />
