@@ -4,6 +4,8 @@ require("dotenv").config(); // Load environment variables from .env file
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
+const http = require("http");
+const server = http.createServer(app);
 
 // Import routes
 const userRoutes = require("./routes/User");
@@ -39,6 +41,7 @@ app.use(
 require("./config/database").dbconnect(); // Connect to database
 require("./config/cloudinary").cloudinaryConnect(); // Connect to cloudinary
 require("./utils/jobScrapper").jobScraper(); // Connect to job scraper
+require("./utils/socket").initializeSocket(server); // Initialize socket
 
 // Route setup
 app.use("/auth", userRoutes); // User authentication routes
@@ -54,6 +57,6 @@ app.get("/", (req, res) => {
 });
 
 // Activate server
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log("Server is running on port", PORT); // Log server activation
 });

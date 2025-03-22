@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@langchain/google-genai": "^0.1.11",
     "axios": "^1.8.4",
     "bcrypt": "^5.1.1",
     "cheerio": "^1.0.0",
@@ -24,6 +25,9 @@
     "mongoose": "^8.3.1",
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.13",
-    "razorpay": "^2.9.2"
+    "razorpay": "^2.9.2",
+    "redis": "^4.7.0",
+    "socket.io": "^4.8.1",
+    "tesseract.js": "^6.0.0"
   }
 }
