@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 
 // Function to send an email
-const mailSender = async (email, title, body) => {
+exports.mailSender = async (email, title, body) => {
   try {
     // Create a transporter object for sending emails
     let transporter = nodemailer.createTransport({
@@ -27,5 +27,3 @@ const mailSender = async (email, title, body) => {
     return error.message;
   }
 };
-
-module.exports = mailSender;

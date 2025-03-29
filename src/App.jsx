@@ -24,7 +24,6 @@ import ViewCourse from "./pages/ViewCourse";
 import VideoDetails from "./components/core/ViewCourse/VideoDetails";
 import UserNotes from "./components/core/Dashborad/UserNotes";
 import JobSupport from "./components/core/Dashborad/JobSupport";
-import ChatBot from "./components/core/Dashborad/ChatBot";
 import FloatingChatBot from "./components/Common/FloatingChatBot";
 
 const App = () => {
@@ -118,8 +117,6 @@ const App = () => {
               <Route path="dashboard/my-notes" element={<UserNotes />} />
 
               <Route path="dashboard/job-support" element={<JobSupport />} />
-
-              <Route path="dashboard/chatbot" element={<ChatBot />} />
             </>
           )}
         </Route>

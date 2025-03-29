@@ -1,7 +1,7 @@
 const Course = require("../models/Course");
 const Category = require("../models/Category");
 const User = require("../models/User");
-const { uploadToCloudinary } = require("../utils/cloudinaryUploader");
+const { uploadToCloudinary } = require("../services/cloudinaryUploader");
 const Lecture = require("../models/Lecture");
 
 // Function to create a new course

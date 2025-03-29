@@ -42,11 +42,4 @@ export const sidebarLinks = [
     type: ACCOUNT_TYPE.STUDENT,
     icon: "VscBriefcase",
   },
-  {
-    id: 7,
-    name: "ChatBot",
-    path: "/dashboard/chatbot",
-    type: ACCOUNT_TYPE.STUDENT,
-    icon: "VscHubot",
-  },
 ];

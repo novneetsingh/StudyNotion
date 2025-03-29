@@ -9,20 +9,19 @@ export default function IconBtn({
 }) {
   return (
     <button
-      disabled={disabled} // Disable the button if the disabled prop is true
-      onClick={onclick} // Set the onclick handler for the button
+      disabled={disabled}
+      onClick={onclick}
       className={`flex items-center ${
         outline ? "border border-yellow-50 bg-transparent" : "bg-yellow-50"
       } cursor-pointer gap-x-2 rounded-md py-2 px-5 font-semibold text-richblack-900 ${customClasses}`}
-      type={type} // Set the type attribute for the button
+      type={type}
     >
-      {children ? ( // If children are provided, render them along with the text
+      {children ? (
         <>
           <span className={`${outline && "text-yellow-50"}`}>{text}</span>
           {children}
         </>
       ) : (
-        // Otherwise, just render the text
         text
       )}
     </button>

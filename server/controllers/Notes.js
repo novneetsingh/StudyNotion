@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const Note = require("../models/Note");
-const { uploadToCloudinary } = require("../utils/cloudinaryUploader");
+const { uploadToCloudinary } = require("../services/cloudinaryUploader");
 
 // create a note for a user
 exports.createNote = async (req, res) => {

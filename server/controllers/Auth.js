@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const OTP = require("../models/OTP");
 const jwt = require("jsonwebtoken");
-const mailSender = require("../utils/mailSender");
+const { mailSender } = require("../services/mailSender");
 const Profile = require("../models/Profile");
 
 // Send OTP For Email Verification

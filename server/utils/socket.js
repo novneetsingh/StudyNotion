@@ -1,6 +1,7 @@
 const { Server } = require("socket.io");
 const { llm } = require("../config/genAI");
-const Tesseract = require("tesseract.js");
+const { imageToText } = require("../services/imageToText");
+const { askPDF } = require("../services/askPDF");
 
 let io;
 
@@ -13,56 +14,61 @@ exports.initializeSocket = (server) => {
 
   io.on("connection", (socket) => {
     socket.on("chatbotMessage", async (data) => {
-      const { message, image, chatHistory } = data;
+      const { message, file, fileType, chatHistory } = data;
 
-      if (!message && !image) {
+      if (!message && !file) {
         socket.emit("chatbotResponse", {
-          response: "Please provide a message or image.",
+          response: "Please provide a message, image, or PDF.",
         });
         socket.emit("chatbotResponseEnd");
         return;
       }
 
-      // Process message with streaming response
-      await askChatbot(message, image, chatHistory, socket.id);
+      await askChatbot(message, file, fileType, chatHistory, socket.id);
     });
   });
 };
 
-const askChatbot = async (message, image, chatHistory, socketId) => {
+const askChatbot = async (message, file, fileType, chatHistory, socketId) => {
   try {
     let context = message || "";
 
-    if (image) {
-      try {
-        const result = await Tesseract.recognize(image, "eng");
+    // Handle file (Image or PDF)
+    if (file) {
+      if (fileType === "image") {
+        context += await imageToText(file);
+      } else if (fileType === "pdf") {
+        const response = await askPDF(file, message);
 
-        if (result?.data?.text) {
-          context += `\nImage text: ${result.data.text}`;
+        if (response) {
+          for await (const chunk of response) {
+            await new Promise((resolve) => {
+              setTimeout(() => {
+                io.to(socketId).emit("chatbotResponse", { response: chunk });
+                resolve();
+              }, 30);
+            });
+          }
         }
-      } catch (error) {
-        console.error("Image processing error:");
-        context += "\nNote: There was an error processing the attached image.";
+
+        return;
       }
     }
 
     // Format chat history properly
-    chatHistory = chatHistory
+    const formattedHistory = chatHistory
       .map((key) => `${key.sender}: ${key.content}`)
       .join("\n");
 
-    // Build the Gemini prompt.
     const prompt = `
       Context: You are an intelligent and friendly AI assistant for StudyNotion, a leading platform for web development education.
-      Conversation History: ${chatHistory}
+      Conversation History: ${formattedHistory}
       User Message: ${context}
       Instructions: Deliver a clear and concise response that addresses the user's needs effectively. Maintain a friendly and professional tone throughout the conversation.
     `;
 
-    // Invoke Gemini API via llm
     const response = await llm.invoke(prompt);
 
-    // Check response format and stream appropriately
     if (response?.content) {
       for await (const chunk of response.content) {
         await new Promise((resolve) => {
@@ -80,7 +86,6 @@ const askChatbot = async (message, image, chatHistory, socketId) => {
         "Sorry, I encountered an error processing your request. Please try again later.",
     });
   } finally {
-    // Notify frontend that response is complete
     io.to(socketId).emit("chatbotResponseEnd");
   }
 };
