@@ -25,6 +25,7 @@ import VideoDetails from "./components/core/ViewCourse/VideoDetails";
 import UserNotes from "./components/core/Dashborad/UserNotes";
 import JobSupport from "./components/core/Dashborad/JobSupport";
 import ChatBot from "./components/core/Dashborad/ChatBot";
+import FloatingChatBot from "./components/Common/FloatingChatBot";
 
 const App = () => {
   const navigate = useNavigate();
@@ -96,7 +97,6 @@ const App = () => {
           <Route path="dashboard/my-profile" element={<MyProfile />} />
 
           <Route path="dashboard/Settings" element={<Settings />} />
-          
 
           {/* Route only for Instructors */}
           {user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
@@ -143,6 +143,8 @@ const App = () => {
 
         <Route path="*" element={<Error />} />
       </Routes>
+
+      {user ? <FloatingChatBot /> : null}
     </div>
   );
 };

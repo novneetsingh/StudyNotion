@@ -53,7 +53,7 @@ app.use("/jobs", jobRoutes); // Job routes
 
 // Default route
 app.get("/", (req, res) => {
-  res.send("<h1>Hello Hi Bye</h1>"); // Simple response for root route
+  res.send("<h1>Hello from StudyNotion Api</h1>");
 });
 
 // Activate server

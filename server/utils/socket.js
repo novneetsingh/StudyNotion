@@ -7,16 +7,13 @@ let io;
 exports.initializeSocket = (server) => {
   io = new Server(server, {
     cors: {
-      origin: "*",
-      methods: ["GET", "POST"],
-      allowedHeaders: ["*"],
+      origin: process.env.FRONTEND_URL,
     },
-    maxHttpBufferSize: 5e6, // 5MB max message size (default is 1MB)
   });
 
   io.on("connection", (socket) => {
     socket.on("chatbotMessage", async (data) => {
-      const { message, image } = data;
+      const { message, image, chatHistory } = data;
 
       if (!message && !image) {
         socket.emit("chatbotResponse", {
@@ -27,20 +24,18 @@ exports.initializeSocket = (server) => {
       }
 
       // Process message with streaming response
-      await askChatbot(message, image, socket.id);
+      await askChatbot(message, image, chatHistory, socket.id);
     });
   });
 };
 
-const askChatbot = async (message, image, socketId) => {
+const askChatbot = async (message, image, chatHistory, socketId) => {
   try {
     let context = message || "";
 
-    // If an image is provided (base64 string), convert it to a Buffer and extract text.
     if (image) {
       try {
-        const imageBuffer = Buffer.from(image, "base64");
-        const result = await Tesseract.recognize(imageBuffer, "eng");
+        const result = await Tesseract.recognize(image, "eng");
 
         if (result?.data?.text) {
           context += `\nImage text: ${result.data.text}`;
@@ -51,12 +46,17 @@ const askChatbot = async (message, image, socketId) => {
       }
     }
 
+    // Format chat history properly
+    chatHistory = chatHistory
+      .map((key) => `${key.sender}: ${key.content}`)
+      .join("\n");
+
     // Build the Gemini prompt.
     const prompt = `
-      Context: You are a helpful AI assistant for StudyNotion, an educational platform.
+      Context: You are an intelligent and friendly AI assistant for StudyNotion, a leading platform for web development education.
+      Conversation History: ${chatHistory}
       User Message: ${context}
-      Instructions: Provide a clear, concise response to help the user.
-      Be friendly but professional.
+      Instructions: Deliver a clear and concise response that addresses the user's needs effectively. Maintain a friendly and professional tone throughout the conversation.
     `;
 
     // Invoke Gemini API via llm

@@ -1,6 +1,5 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/core/Dashborad/Sidebar";
-import FloatingChatBot from "../components/core/Dashborad/FloatingChatBot";
 
 function Dashboard() {
   return (
@@ -11,7 +10,6 @@ function Dashboard() {
           <Outlet />
         </div>
       </div>
-      <FloatingChatBot />
     </div>
   );
 }
