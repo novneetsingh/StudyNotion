@@ -3,7 +3,7 @@ const Course = require("../models/Course");
 const User = require("../models/User");
 const Note = require("../models/Note");
 const { uploadToCloudinary } = require("../services/cloudinaryUploader");
-const { convertSecondsToDuration } = require("../services/secToDuration");
+const { convertSecondsToDuration } = require("../utils/secToDuration");
 
 // Method for updating a user's profile
 exports.updateProfile = async (req, res) => {

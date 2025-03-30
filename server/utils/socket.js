@@ -1,7 +1,8 @@
 const { Server } = require("socket.io");
 const { llm } = require("../config/genAI");
-const { imageToText } = require("../services/imageToText");
-const { askPDF } = require("../services/askPDF");
+const { imageToText } = require("../services/chatbot/imageToText");
+const { askPDF } = require("../services/chatbot/askPDF");
+const { streamResponse } = require("../services/chatbot/streamResponse");
 
 let io;
 
@@ -36,23 +37,19 @@ const askChatbot = async (message, file, fileType, chatHistory, socketId) => {
     // Handle file (Image or PDF)
     if (file) {
       if (fileType === "image") {
-        context += await imageToText(file);
+        const response = await imageToText(file, message);
+
+        if (response) {
+          await streamResponse(io, socketId, response);
+        }
       } else if (fileType === "pdf") {
         const response = await askPDF(file, message);
 
         if (response) {
-          for await (const chunk of response) {
-            await new Promise((resolve) => {
-              setTimeout(() => {
-                io.to(socketId).emit("chatbotResponse", { response: chunk });
-                resolve();
-              }, 30);
-            });
-          }
+          await streamResponse(io, socketId, response);
         }
-
-        return;
       }
+      return;
     }
 
     // Format chat history properly
@@ -61,7 +58,7 @@ const askChatbot = async (message, file, fileType, chatHistory, socketId) => {
       .join("\n");
 
     const prompt = `
-      Context: You are an intelligent and friendly AI assistant for StudyNotion, a leading platform for web development education.
+      Context: You are a knowledgeable and friendly AI assistant for StudyNotion, a leading online education platform for CSE B.Tech students.
       Conversation History: ${formattedHistory}
       User Message: ${context}
       Instructions: Deliver a clear and concise response that addresses the user's needs effectively. Maintain a friendly and professional tone throughout the conversation.
@@ -70,14 +67,7 @@ const askChatbot = async (message, file, fileType, chatHistory, socketId) => {
     const response = await llm.invoke(prompt);
 
     if (response?.content) {
-      for await (const chunk of response.content) {
-        await new Promise((resolve) => {
-          setTimeout(() => {
-            io.to(socketId).emit("chatbotResponse", { response: chunk });
-            resolve();
-          }, 30);
-        });
-      }
+      await streamResponse(io, socketId, response.content);
     }
   } catch (error) {
     console.error("Chatbot error:", error);
