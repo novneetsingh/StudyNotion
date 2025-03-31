@@ -1,4 +1,5 @@
 const Category = require("../models/Category");
+const { redisClient } = require("../config/redis");
 
 // Function to create a new category
 exports.createCategory = async (req, res) => {
@@ -36,10 +37,22 @@ exports.createCategory = async (req, res) => {
 // Function to fetch all categories
 exports.showAllCategories = async (req, res) => {
   try {
-    // Find all categories
+    // Check if categories are cached in Redis
+    const cachedCategories = await redisClient.get("categories");
+
+    if (cachedCategories) {
+      return res.status(200).json({
+        success: true,
+        data: JSON.parse(cachedCategories),
+      });
+    }
+
+    // Find all categories if not cached
     const allCategories = await Category.find();
 
-    // Return success response with categories data
+    // Cache the categories in Redis for 10 minutes
+    await redisClient.setEx("categories", 600, JSON.stringify(allCategories));
+
     res.status(200).json({
       success: true,
       data: allCategories,
@@ -57,6 +70,18 @@ exports.categoryPageDetails = async (req, res) => {
   try {
     const { categoryId } = req.params;
 
+    // Check if categoryDetails are cached in Redis
+    const cachedCategoryDetails = await redisClient.get(
+      `categoryDetails:${categoryId}`
+    );
+
+    if (cachedCategoryDetails) {
+      return res.status(200).json({
+        success: true,
+        data: JSON.parse(cachedCategoryDetails),
+      });
+    }
+
     // Get details of the selected category
     const selectedCategory = await Category.findById(categoryId).populate({
       path: "courses",
@@ -73,6 +98,13 @@ exports.categoryPageDetails = async (req, res) => {
         message: "Category not found",
       });
     }
+
+    // Cache the categoryDetails in Redis for 10 minutes
+    await redisClient.setEx(
+      `categoryDetails:${categoryId}`,
+      600,
+      JSON.stringify(selectedCategory)
+    );
 
     // Return only the selected category details
     return res.status(200).json({

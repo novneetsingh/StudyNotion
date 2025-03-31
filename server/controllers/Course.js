@@ -3,6 +3,7 @@ const Category = require("../models/Category");
 const User = require("../models/User");
 const { uploadToCloudinary } = require("../services/cloudinaryUploader");
 const Lecture = require("../models/Lecture");
+const { redisClient } = require("../config/redis");
 
 // Function to create a new course
 exports.createCourse = async (req, res) => {
@@ -81,6 +82,18 @@ exports.getCourseDetails = async (req, res) => {
     // Extract courseId from the request body
     const { courseId } = req.params;
 
+    // check if course is cached in Redis
+    const cachedCourseDetails = await redisClient.get(
+      `courseDetails:${courseId}`
+    );
+
+    if (cachedCourseDetails) {
+      return res.status(200).json({
+        success: true,
+        data: JSON.parse(cachedCourseDetails),
+      });
+    }
+
     // Find the course details by courseId
     const courseDetails = await Course.findById(courseId)
       // Populate instructor details and nested additionalDetails
@@ -99,6 +112,13 @@ exports.getCourseDetails = async (req, res) => {
       });
     }
 
+    // cache the course details in Redis for 10 minutes
+    await redisClient.setEx(
+      `courseDetails:${courseId}`,
+      600,
+      JSON.stringify(courseDetails)
+    );
+
     // Send success response with course details and total duration
     return res.status(200).json({
       success: true,
@@ -116,8 +136,19 @@ exports.getCourseDetails = async (req, res) => {
 // Function to get the full details of a course
 exports.getFullCourseDetails = async (req, res) => {
   try {
-    // Extract the courseId from the request body and userId from the request user object
     const { courseId } = req.params;
+
+    // Check if course details are cached in Redis
+    const cachedFullCourseDetails = await redisClient.get(
+      `fullCourseDetails:${courseId}`
+    );
+
+    if (cachedFullCourseDetails) {
+      return res.status(200).json({
+        success: true,
+        data: JSON.parse(cachedFullCourseDetails),
+      });
+    }
 
     // Fetch course details from the database, populating necessary fields
     const courseDetails = await Course.findOne({ _id: courseId }).populate(
@@ -131,6 +162,13 @@ exports.getFullCourseDetails = async (req, res) => {
         message: `Could not find course with id: ${courseId}`,
       });
     }
+
+    // cache the full course details in Redis for 10 minutes
+    await redisClient.setEx(
+      `fullCourseDetails:${courseId}`,
+      600,
+      JSON.stringify(courseDetails)
+    );
 
     // Return the course details and total duration in the response
     return res.status(200).json({
