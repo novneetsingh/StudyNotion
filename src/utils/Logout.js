@@ -5,11 +5,7 @@ import { setUser } from "../redux-toolkit/slices/profileSlice";
 export function logout(navigate) {
   return async (dispatch) => {
     try {
-      await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/auth/logout`,
-        {},
-        { withCredentials: true } // Ensures the cookie is deleted
-      );
+      await axios.post(`/auth/logout`, {});
 
       dispatch(setUser(null));
       navigate("/login");

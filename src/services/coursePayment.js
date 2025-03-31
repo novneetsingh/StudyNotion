@@ -13,7 +13,7 @@ function loadScript(src) {
 }
 
 // Function to handle the course purchase process
-export async function buyCourse(courseId, user, navigate, dispatch) {
+export async function buyCourse(courseId, user, navigate) {
   const toastId = toast.loading("Processing payment...");
 
   try {
@@ -28,13 +28,7 @@ export async function buyCourse(courseId, user, navigate, dispatch) {
     }
 
     // 2. Create an order with the backend
-    const response = await axios.post(
-      `${import.meta.env.VITE_BACKEND_URL}/payment/capturePayment`,
-      { courseId },
-      {
-        withCredentials: true,
-      }
-    );
+    const response = await axios.post(`/payment/capturePayment`, { courseId });
 
     if (!response.data.success) {
       console.log("Buy Course Error:", response.data.message);
@@ -65,13 +59,12 @@ export async function buyCourse(courseId, user, navigate, dispatch) {
             razorpay_signature: response.razorpay_signature,
             courseId: courseId,
           },
-          navigate,
-          dispatch
+          navigate
         );
       },
       theme: {
         color: "#F7F7F7",
-      }
+      },
     };
 
     // 5. Open Razorpay payment dialog
@@ -92,17 +85,11 @@ export async function buyCourse(courseId, user, navigate, dispatch) {
 }
 
 // Function to verify the payment
-async function verifyPayment(paymentData, navigate, dispatch) {
+async function verifyPayment(paymentData, navigate) {
   const toastId = toast.loading("Verifying payment...");
 
   try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_BACKEND_URL}/payment/verifyPayment`,
-      paymentData,
-      {
-        withCredentials: true,
-      }
-    );
+    const response = await axios.post(`/payment/verifyPayment`, paymentData);
 
     if (!response.data.success) {
       console.log("Verify Payment Error:", response.data.message);

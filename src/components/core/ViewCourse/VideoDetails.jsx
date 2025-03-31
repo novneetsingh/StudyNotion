@@ -1,21 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 const VideoDetails = () => {
   const { lectureId } = useParams();
-  const { courseContent } = useSelector((state) => state.viewCourse); // Get course content from Redux state
-  const [videoData, setVideoData] = useState(null); // State to hold the video data
-  const videoRef = useRef(null); // Ref for the video element
+  const { courseContent } = useSelector((state) => state.viewCourse);
+  const [videoData, setVideoData] = useState(null);
 
   useEffect(() => {
     if (courseContent && courseContent.length > 0) {
-      const lecture = courseContent.find((lecture) => lecture._id === lectureId);
+      const lecture = courseContent.find(
+        (lecture) => lecture._id === lectureId
+      );
       setVideoData(lecture);
     }
   }, [lectureId, courseContent]);
-
-  
 
   return (
     <div className="flex flex-col gap-5 text-white">
@@ -29,7 +28,6 @@ const VideoDetails = () => {
       ) : videoData ? (
         <div className="video-container w-full aspect-video bg-richblack-800 rounded-md overflow-hidden">
           <video
-            ref={videoRef}
             className="w-full h-full object-cover"
             src={videoData.videoUrl}
             controls

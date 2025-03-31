@@ -15,12 +15,7 @@ const JobSupport = () => {
     const fetchJobs = async () => {
       try {
         dispatch(setLoading(true));
-        const response = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/jobs`,
-          {
-            withCredentials: true,
-          }
-        );
+        const response = await axios.get(`/jobs`);
 
         setJobs(response.data.data);
       } catch (error) {

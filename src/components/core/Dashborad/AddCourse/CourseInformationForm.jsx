@@ -3,7 +3,10 @@ import { useForm } from "react-hook-form";
 import { HiOutlineCurrencyRupee } from "react-icons/hi";
 import { MdNavigateNext } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { setCourse, setStep } from "../../../../redux-toolkit/slices/courseSlice";
+import {
+  setCourse,
+  setStep,
+} from "../../../../redux-toolkit/slices/courseSlice";
 import IconBtn from "../../../Common/IconBtn";
 import axios from "axios";
 import { setLoading } from "../../../../redux-toolkit/slices/profileSlice";
@@ -23,9 +26,7 @@ export default function CourseInformationForm() {
   useEffect(() => {
     const getCategories = async () => {
       try {
-        const categories = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/course/showAllCategories`
-        );
+        const categories = await axios.get(`/course/showAllCategories`);
 
         setCourseCategories(categories.data.data);
       } catch (error) {
@@ -43,16 +44,11 @@ export default function CourseInformationForm() {
 
       data.thumbnailImage = data.thumbnailImage[0];
 
-      const result = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/course/createCourse`,
-        data,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }
-      );
+      const result = await axios.post(`/course/createCourse`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       dispatch(setStep(2)); // Update step to 2 in Redux state
       dispatch(setCourse(result.data.data)); // Save course data in Redux state

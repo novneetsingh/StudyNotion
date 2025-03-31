@@ -31,13 +31,7 @@ export default function ChangeProfilePicture() {
 
     try {
       dispatch(setLoading(true));
-      const res = await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/profile/updateDisplayPicture`,
-        formData,
-        {
-          withCredentials: true,
-        }
-      );
+      const res = await axios.put(`/profile/updateDisplayPicture`, formData);
 
       toast.success("Display Picture Updated Successfully", { id: toastId });
       navigate("/dashboard/my-profile");

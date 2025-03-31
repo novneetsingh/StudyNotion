@@ -21,13 +21,7 @@ function Login() {
   const onSubmit = async (data) => {
     const toastId = toast.loading("Logging in...");
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/auth/login`,
-        data,
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.post(`/auth/login`, data);
 
       dispatch(setUser(response.data.user));
 

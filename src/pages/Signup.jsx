@@ -28,7 +28,7 @@ function Signup() {
 
     const toastId = toast.loading("Sending OTP...");
     try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/sendotp`, {
+      await axios.post(`/auth/sendotp`, {
         email,
       });
 
@@ -42,7 +42,7 @@ function Signup() {
   const onSubmit = async (data) => {
     const toastId = toast.loading("Signing up...");
     try {
-      await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/signup`, {
+      await axios.post(`/auth/signup`, {
         ...data,
         accountType,
       });

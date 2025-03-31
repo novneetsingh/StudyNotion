@@ -16,14 +16,15 @@ const Navbar = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       dispatch(setLoading(true));
+
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/course/showAllCategories`
-        );
+        const res = await axios.get(`/course/showAllCategories`);
+
         setSubLinks(res.data.data);
       } catch (error) {
         console.log("Could not fetch Categories.", error);
       }
+
       dispatch(setLoading(false));
     };
 

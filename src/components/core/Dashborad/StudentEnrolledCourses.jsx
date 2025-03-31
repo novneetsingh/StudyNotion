@@ -10,10 +10,7 @@ export default function StudentEnrolledCourses() {
   useEffect(() => {
     const getEnrolledCourses = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/profile/getEnrolledCourses`,
-          { withCredentials: true }
-        );
+        const res = await axios.get(`/profile/getEnrolledCourses`);
 
         setEnrolledCourses(res.data.data);
       } catch (error) {

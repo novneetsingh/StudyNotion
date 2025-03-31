@@ -18,14 +18,7 @@ export default function ViewCourse() {
     // Function to fetch course details
     const fetchCourseDetails = async () => {
       try {
-        const res = await axios.get(
-          `${
-            import.meta.env.VITE_BACKEND_URL
-          }/course/getFullCourseDetails/${courseId}`,
-          {
-            withCredentials: true,
-          }
-        );
+        const res = await axios.get(`/course/getFullCourseDetails/${courseId}`);
 
         dispatch(setCourseContent(res.data.data.courseContent));
         dispatch(setCourseName(res.data.data.courseName));

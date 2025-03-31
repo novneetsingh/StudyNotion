@@ -1,11 +1,8 @@
 import IconBtn from "./IconBtn";
 
-// ConfirmationModal component definition
 export default function ConfirmationModal({ modalData }) {
   return (
-    // Modal overlay
     <div className="fixed inset-0 z-[1000] !mt-0 grid place-items-center overflow-auto bg-white bg-opacity-10 backdrop-blur-sm">
-      {/* Modal container */}
       <div className="w-11/12 max-w-[350px] rounded-lg border border-richblack-400 bg-richblack-800 p-6">
         {/* Modal title */}
         <p className="text-2xl font-semibold text-richblack-5">

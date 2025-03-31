@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { BiInfoCircle } from "react-icons/bi";
 import { HiOutlineGlobeAlt } from "react-icons/hi";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import ConfirmationModal from "../components/Common/ConfirmationModal";
 import Footer from "../components/Common/Footer";
@@ -14,7 +14,6 @@ import { ACCOUNT_TYPE } from "../utils/constants";
 
 function CourseDetails() {
   const { user } = useSelector((state) => state.profile);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // Get courseId from URL parameters
@@ -51,9 +50,9 @@ function CourseDetails() {
       if (user.accountType === ACCOUNT_TYPE.INSTRUCTOR) {
         toast.error("Instructors cannot purchase courses");
         return;
-      } 
+      }
 
-      buyCourse(courseId, user, navigate, dispatch);
+      buyCourse(courseId, user, navigate);
     } else {
       setConfirmationModal({
         text1: "You are not logged in!",

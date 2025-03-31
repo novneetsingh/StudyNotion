@@ -16,12 +16,12 @@ export default function SidebarLink({ link, iconName }) {
   return (
     <NavLink
       to={link.path}
-      onClick={() => dispatch(resetCourseState())} // Dispatch resetCourseState action on click
+      onClick={() => dispatch(resetCourseState())} 
       className={`relative px-8 py-2 text-md font-medium ${
         matchRoute(link.path)
-          ? "bg-yellow-800 text-yellow-50" // Active link styles
-          : "bg-opacity-0 text-richblack-300" // Inactive link styles
-      } transition-all duration-200`} // Transition for smooth style changes
+          ? "bg-yellow-800 text-yellow-50" 
+          : "bg-opacity-0 text-richblack-300" 
+      } transition-all duration-200`} 
     >
       <div className="flex items-center gap-x-2">
         {/* Render the dynamically selected icon */}

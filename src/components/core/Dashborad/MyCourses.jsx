@@ -16,12 +16,7 @@ export default function MyCourses() {
     const fetchCourses = async () => {
       try {
         dispatch(setLoading(true));
-        const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/course/getInstructorCourses`,
-          {
-            withCredentials: true,
-          }
-        );
+        const res = await axios.get(`/course/getInstructorCourses`);
 
         setCourses(res.data.data);
       } catch (error) {

@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import NotesCard from "./NotesCard";
-import { FileText } from "lucide-react";
 import { useSelector } from "react-redux";
 
 const AllNotes = ({ fetchNotes, notes }) => {
@@ -30,9 +29,6 @@ const AllNotes = ({ fetchNotes, notes }) => {
       {/* Notes Grid */}
       {notes.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-center">
-          <div className="bg-richblack-700 p-5 rounded-full mb-4">
-            <FileText className="w-10 h-10 text-yellow-50" />
-          </div>
           <h2 className="text-xl font-semibold text-richblack-5 mb-2">
             No notes yet
           </h2>

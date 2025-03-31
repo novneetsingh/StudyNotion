@@ -1,6 +1,11 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Mic, MicOff, Send, X } from "lucide-react";
+import {
+  AiOutlineAudio,
+  AiOutlineAudioMuted,
+  AiOutlineSend,
+  AiOutlineClose,
+} from "react-icons/ai";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useVoiceRecorder } from "../../../../hooks/voiceRecorder";
@@ -41,16 +46,11 @@ const VoiceNoteRecorder = ({ fetchNotes }) => {
       formData.append("transcribedText", transcribedText || "");
       formData.append("audio", audioBlob, "recording.webm");
 
-      await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/notes/create-note`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }
-      );
+      await axios.post(`/notes/create-note`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       handleReset();
       fetchNotes();
@@ -95,9 +95,9 @@ const VoiceNoteRecorder = ({ fetchNotes }) => {
             disabled={loading}
           >
             {isRecording ? (
-              <MicOff className="w-5 h-5 text-white" />
+              <AiOutlineAudioMuted className="w-5 h-5 text-white" />
             ) : (
-              <Mic className="w-5 h-5" />
+              <AiOutlineAudio className="w-5 h-5" />
             )}
           </button>
 
@@ -110,7 +110,7 @@ const VoiceNoteRecorder = ({ fetchNotes }) => {
               title="Clear"
               disabled={loading}
             >
-              <X className="w-5 h-5 text-pink-200" />
+              <AiOutlineClose className="w-5 h-5 text-pink-200" />
             </button>
           )}
 
@@ -125,7 +125,7 @@ const VoiceNoteRecorder = ({ fetchNotes }) => {
             }`}
             title="Save Note"
           >
-            <Send className="w-5 h-5" />
+            <AiOutlineSend className="w-5 h-5" />
           </button>
         </form>
       </div>

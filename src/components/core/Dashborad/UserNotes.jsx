@@ -14,12 +14,7 @@ const UserNotes = () => {
   const fetchNotes = async () => {
     try {
       dispatch(setLoading(true));
-      const response = await axios.get(
-        `${import.meta.env.VITE_BACKEND_URL}/notes/all-notes`,
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`/notes/all-notes`);
       setNotes(response.data.notes);
     } catch (error) {
       console.error("Error fetching notes:", error);

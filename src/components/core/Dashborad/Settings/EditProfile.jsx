@@ -33,13 +33,7 @@ export default function EditProfile() {
   // Function to handle form submission
   const submitProfileForm = async (data) => {
     try {
-      const res = await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/profile/updateProfile`,
-        data,
-        {
-          withCredentials: true,
-        }
-      );
+      const res = await axios.put(`/profile/updateProfile`, data);
 
       toast.success("Profile Updated Successfully");
       dispatch(setUser(res.data.data));

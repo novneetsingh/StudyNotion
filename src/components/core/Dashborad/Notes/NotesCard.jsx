@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Copy, Pencil, Trash, Calendar } from "lucide-react";
+import { AiOutlineCopy, AiOutlineCalendar } from "react-icons/ai";
+import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { formatDate } from "../../../../utils/formatDate";
@@ -11,13 +12,8 @@ const NotesCard = ({ note, fetchNotes }) => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(
-        `${import.meta.env.VITE_BACKEND_URL}/notes/delete-note/${note._id}`,
-        {
-          withCredentials: true,
-        }
-      );
-      fetchNotes(); // Directly call fetchNotes after deletion
+      await axios.delete(`/notes/delete-note/${note._id}`);
+      fetchNotes(); // Refresh notes after deletion
     } catch (error) {
       console.error("Error deleting note:", error);
       toast.error("Failed to delete note");
@@ -33,7 +29,7 @@ const NotesCard = ({ note, fetchNotes }) => {
         {/* Header with Date */}
         <div className="flex justify-between items-center mb-2">
           <div className="flex items-center text-xs text-richblack-300">
-            <Calendar className="w-3 h-3 mr-1" />
+            <AiOutlineCalendar className="w-3 h-3 mr-1" />
             <span>{formatDate(note.createdAt)}</span>
           </div>
         </div>
@@ -55,7 +51,7 @@ const NotesCard = ({ note, fetchNotes }) => {
             className="p-2 bg-richblack-700 hover:bg-richblack-600 rounded-lg transition-colors"
             title="Copy to clipboard"
           >
-            <Copy className="w-4 h-4 text-yellow-50" />
+            <AiOutlineCopy className="w-4 h-4 text-yellow-50" />
           </button>
 
           <button
@@ -63,7 +59,7 @@ const NotesCard = ({ note, fetchNotes }) => {
             className="p-2 bg-yellow-50 hover:bg-yellow-100 rounded-lg transition-colors"
             title="Edit note"
           >
-            <Pencil className="w-4 h-4 text-richblack-900" />
+            <FaRegEdit className="w-4 h-4 text-richblack-900" />
           </button>
 
           <button
@@ -71,7 +67,7 @@ const NotesCard = ({ note, fetchNotes }) => {
             className="p-2 bg-pink-600 hover:bg-pink-700 rounded-lg transition-colors"
             title="Delete note"
           >
-            <Trash className="w-4 h-4 text-richblack-5" />
+            <FaRegTrashAlt className="w-4 h-4 text-richblack-5" />
           </button>
         </div>
       </div>

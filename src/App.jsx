@@ -36,12 +36,7 @@ const App = () => {
     const fetchUserDetails = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/profile/getUserDetails`,
-          {
-            withCredentials: true,
-          }
-        );
+        const res = await axios.get(`/profile/getUserDetails`);
 
         dispatch(setUser(res.data.data));
       } catch (error) {

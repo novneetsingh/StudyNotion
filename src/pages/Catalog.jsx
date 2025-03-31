@@ -16,9 +16,7 @@ function Catalog() {
   useEffect(() => {
     const getCategories = async () => {
       try {
-        const res = await axios.get(
-          `${import.meta.env.VITE_BACKEND_URL}/course/showAllCategories`
-        );
+        const res = await axios.get(`/course/showAllCategories`);
 
         // Find the category that matches the catalog name
         const category = res?.data?.data?.find(
@@ -44,9 +42,7 @@ function Catalog() {
     const fetchCatalogPage = async () => {
       if (categoryId) {
         try {
-          const res = await axios.get(
-            `${import.meta.env.VITE_BACKEND_URL}/course/category/${categoryId}`
-          );
+          const res = await axios.get(`/course/category/${categoryId}`);
           setCatalogPageData(res.data);
         } catch (error) {
           console.log("Error fetching catalog page data:", error);

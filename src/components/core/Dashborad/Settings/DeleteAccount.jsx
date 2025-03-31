@@ -15,12 +15,7 @@ export default function DeleteAccount() {
   // Function to handle account deletion
   async function handleDeleteAccount() {
     try {
-      await axios.delete(
-        `${import.meta.env.VITE_BACKEND_URL}/profile/deleteProfile`,
-        {
-          withCredentials: true,
-        }
-      );
+      await axios.delete(`/profile/deleteProfile`);
 
       toast.success("Profile Deleted Successfully");
       dispatch(logout(navigate));

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Save, Image } from "lucide-react";
+import { AiOutlinePicture } from "react-icons/ai";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
@@ -35,16 +35,11 @@ const EditNoteModal = ({ note, isOpen, onClose, fetchNotes }) => {
     });
 
     try {
-      await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/notes/update-note/${note._id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }
-      );
+      await axios.put(`/notes/update-note/${note._id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       onClose();
       fetchNotes();
@@ -117,7 +112,7 @@ const EditNoteModal = ({ note, isOpen, onClose, fetchNotes }) => {
                 htmlFor="image-upload"
                 className="cursor-pointer flex items-center gap-2 text-gray-600 hover:text-gray-900"
               >
-                <Image className="h-5 w-5" />
+                <AiOutlinePicture className="h-5 w-5" />
                 <span className="text-sm">Add Images</span>
                 <input
                   id="image-upload"
@@ -168,7 +163,6 @@ const EditNoteModal = ({ note, isOpen, onClose, fetchNotes }) => {
               disabled={loading}
               className="px-4 py-2 bg-caribbeangreen-500 text-richblack-900 rounded-lg hover:bg-caribbeangreen-600 transition-colors flex items-center gap-2"
             >
-              <Save className="w-4 h-4" />
               {loading ? "Saving..." : "Save Changes"}
             </button>
           </div>

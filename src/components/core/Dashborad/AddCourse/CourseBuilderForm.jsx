@@ -26,20 +26,15 @@ export default function CourseBuilderForm() {
     // add course id to the data
     data.courseId = course._id;
     data.video = data.video[0];
-    
+
     try {
       dispatch(setLoading(true));
 
-      await axios.post(
-        `${import.meta.env.VITE_BACKEND_URL}/course/addLecture`,
-        data,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }
-      );
+      await axios.post(`/course/addLecture`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       toast.success("Lecture added successfully");
     } catch (error) {

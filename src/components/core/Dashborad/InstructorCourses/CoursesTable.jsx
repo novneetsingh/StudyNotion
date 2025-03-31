@@ -14,10 +14,7 @@ export default function CoursesTable({ courses, setCourses }) {
   // Function to handle course deletion
   const handleCourseDelete = async (courseId) => {
     try {
-      await axios.delete(
-        `${import.meta.env.VITE_BACKEND_URL}/course/deleteCourse/${courseId}`,
-        { withCredentials: true }
-      );
+      await axios.delete(`/course/deleteCourse/${courseId}`);
 
       toast.success("Course Deleted Successfully");
       setConfirmationModal(null);

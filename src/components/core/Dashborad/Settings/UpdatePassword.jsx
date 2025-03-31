@@ -23,13 +23,7 @@ export default function UpdatePassword() {
   // Function to handle form submission
   const submitPasswordForm = async (data) => {
     try {
-      await axios.put(
-        `${import.meta.env.VITE_BACKEND_URL}/auth/changepassword`,
-        data,
-        {
-          withCredentials: true,
-        }
-      );
+      await axios.put(`/auth/changepassword`, data);
 
       toast.success("Password Changed Successfully");
       navigate("/dashboard/my-profile");
