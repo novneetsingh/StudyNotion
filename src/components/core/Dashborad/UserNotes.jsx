@@ -1,21 +1,24 @@
 import VoiceNoteRecorder from "./Notes/VoiceNoteRecorder";
 import AllNotes from "./Notes/AllNotes";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "../../../redux-toolkit/slices/profileSlice";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useState } from "react";
+import { setNotes } from "../../../redux-toolkit/slices/notesSlice";
 
 const UserNotes = () => {
   const dispatch = useDispatch();
-  const [notes, setNotes] = useState([]);
+  const { notes } = useSelector((state) => state.notes);
 
   // Fetch all notes
   const fetchNotes = async () => {
+    // Avoid fetching if notes are already present
+    if (notes.length > 0) return;
+
     try {
       dispatch(setLoading(true));
       const response = await axios.get(`/notes/all-notes`);
-      setNotes(response.data.notes);
+      dispatch(setNotes(response.data.notes));
     } catch (error) {
       console.error("Error fetching notes:", error);
       toast.error("Failed to fetch notes");

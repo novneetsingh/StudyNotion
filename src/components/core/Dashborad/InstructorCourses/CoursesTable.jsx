@@ -4,10 +4,14 @@ import { formatDate } from "../../../../utils/formatDate";
 import ConfirmationModal from "../../../Common/ConfirmationModal";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Table from "rc-table";
+import { setUserCourses } from "../../../../redux-toolkit/slices/viewCourseSlice";
 
-export default function CoursesTable({ courses, setCourses }) {
+export default function CoursesTable() {
+  const dispatch = useDispatch();
+
+  const { userCourses } = useSelector((state) => state.viewCourse);
   const [confirmationModal, setConfirmationModal] = useState(null);
   const { loading } = useSelector((state) => state.profile);
 
@@ -19,8 +23,8 @@ export default function CoursesTable({ courses, setCourses }) {
       toast.success("Course Deleted Successfully");
       setConfirmationModal(null);
 
-      setCourses((prevCourses) =>
-        prevCourses.filter((course) => course._id !== courseId)
+      dispatch(
+        setUserCourses(userCourses.filter((course) => course._id !== courseId))
       );
     } catch (error) {
       console.error("Error deleting course:", error);
@@ -127,7 +131,7 @@ export default function CoursesTable({ courses, setCourses }) {
       <div className="mt-4 bg-richblack-800 rounded-lg shadow-md">
         <Table
           columns={columns}
-          data={courses || []}
+          data={userCourses}
           rowKey="_id"
           emptyText={emptyRenderer}
           className="w-full text-richblack-100"

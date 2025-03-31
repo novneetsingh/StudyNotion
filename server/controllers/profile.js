@@ -198,6 +198,16 @@ exports.getEnrolledCourses = async (req, res) => {
       course.totalDuration = convertSecondsToDuration(totalDurationInSeconds);
     });
 
+    // return only required fields
+    userDetails.courses = userDetails.courses.map((course) => ({
+      _id: course._id,
+      courseName: course.courseName,
+      thumbnail: course.thumbnail,
+      totalDuration: course.totalDuration,
+      lectureCount: course.courseContent.length,
+      firstlectureId: course.courseContent[0]?._id,
+    }));
+
     return res.status(200).json({
       success: true,
       data: userDetails.courses,

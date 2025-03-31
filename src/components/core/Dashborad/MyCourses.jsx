@@ -1,24 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import CoursesTable from "./InstructorCourses/CoursesTable";
 import axios from "axios";
 import { setLoading } from "../../../redux-toolkit/slices/profileSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { setUserCourses } from "../../../redux-toolkit/slices/viewCourseSlice";
 
 export default function MyCourses() {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.profile);
-
-  // State to store the list of courses
-  const [courses, setCourses] = useState([]);
+  const { userCourses } = useSelector((state) => state.viewCourse);
 
   // Fetch the instructor's courses when the component mounts
   useEffect(() => {
     const fetchCourses = async () => {
+      // check if data is already present in the store
+      if (userCourses.length > 0) return;
+
       try {
         dispatch(setLoading(true));
         const res = await axios.get(`/course/getInstructorCourses`);
 
-        setCourses(res.data.data);
+        dispatch(setUserCourses(res.data.data));
       } catch (error) {
         console.log("Could not fetch Courses.", error);
       } finally {
@@ -43,7 +45,7 @@ export default function MyCourses() {
       <div className="mb-14 flex items-center justify-between">
         <h1 className="text-3xl font-medium text-richblack-5">My Courses</h1>
       </div>
-      {courses && <CoursesTable courses={courses} setCourses={setCourses} />}
+      {userCourses && <CoursesTable />}
     </>
   );
 }

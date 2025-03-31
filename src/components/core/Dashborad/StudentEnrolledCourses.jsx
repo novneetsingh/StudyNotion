@@ -1,18 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Table from "rc-table";
+import { setUserCourses } from "../../../redux-toolkit/slices/viewCourseSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function StudentEnrolledCourses() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [enrolledCourses, setEnrolledCourses] = useState(null);
+  const { userCourses } = useSelector((state) => state.viewCourse);
 
   useEffect(() => {
     const getEnrolledCourses = async () => {
+      // Check if courses are already fetched and stored in Redux
+      if (userCourses.length > 0) return;
+
       try {
         const res = await axios.get(`/profile/getEnrolledCourses`);
 
-        setEnrolledCourses(res.data.data);
+        dispatch(setUserCourses(res.data.data));
       } catch (error) {
         console.error("Could not fetch enrolled courses.", error);
       }
@@ -34,7 +40,7 @@ export default function StudentEnrolledCourses() {
           className="flex items-center gap-4 cursor-pointer"
           onClick={() =>
             navigate(
-              `/view-course/${course._id}/lecture/${course.courseContent?.[0]?._id}`
+              `/view-course/${course._id}/lecture/${course.firstlectureId}`
             )
           }
         >
@@ -63,12 +69,12 @@ export default function StudentEnrolledCourses() {
       width: 150,
       className:
         "bg-richblack-900 text-richblack-100 text-center py-4 text-sm font-medium outline outline-richblack-700",
-      render: (_, course) => <span>{course.courseContent.length}</span>,
+      render: (_, course) => <span>{course.lectureCount}</span>,
     },
   ];
 
   // Show loading spinner if courses are not fetched yet
-  if (!enrolledCourses) {
+  if (!userCourses) {
     return (
       <div className="grid min-h-[calc(100vh-3.5rem)] place-items-center">
         <div className="spinner"></div>
@@ -77,7 +83,7 @@ export default function StudentEnrolledCourses() {
   }
 
   // If no courses are enrolled
-  if (enrolledCourses.length === 0) {
+  if (userCourses.length === 0) {
     return (
       <p className="py-10 text-center text-lg font-medium text-richblack-100 bg-richblack-900">
         You have not enrolled in any course yet.
@@ -93,7 +99,7 @@ export default function StudentEnrolledCourses() {
         </h1>
       </div>
 
-      <Table columns={columns} data={enrolledCourses} rowKey="_id" />
+      <Table columns={columns} data={userCourses} rowKey="_id" />
     </>
   );
 }
