@@ -42,4 +42,10 @@ export const sidebarLinks = [
     type: ACCOUNT_TYPE.STUDENT,
     icon: "VscBriefcase",
   },
+  {
+    id: 7,
+    name: "Live Sessions",
+    path: "/dashboard/live-sessions",
+    icon: "VscDeviceCameraVideo",
+  },
 ];

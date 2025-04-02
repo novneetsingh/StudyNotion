@@ -3,6 +3,7 @@ const { llm } = require("../config/genAI");
 const { imageToText } = require("../services/chatbot/imageToText");
 const { askPDF } = require("../services/chatbot/askPDF");
 const { streamResponse } = require("../services/chatbot/streamResponse");
+const { handleLiveVideo } = require("../services/liveVideo");
 
 let io;
 
@@ -27,6 +28,9 @@ exports.initializeSocket = (server) => {
 
       await askChatbot(message, file, fileType, chatHistory, socket.id);
     });
+
+    // Live Video
+    handleLiveVideo(io, socket);
   });
 };
 
