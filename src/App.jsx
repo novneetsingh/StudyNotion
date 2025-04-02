@@ -25,7 +25,6 @@ import VideoDetails from "./components/core/ViewCourse/VideoDetails";
 import UserNotes from "./components/core/Dashborad/UserNotes";
 import JobSupport from "./components/core/Dashborad/JobSupport";
 import FloatingChatBot from "./components/Common/FloatingChatBot";
-import LiveVideoSection from "./components/core/Dashborad/LiveVideoSection";
 
 const App = () => {
   const navigate = useNavigate();
@@ -92,8 +91,6 @@ const App = () => {
           <Route path="dashboard/my-profile" element={<MyProfile />} />
 
           <Route path="dashboard/Settings" element={<Settings />} />
-
-          <Route path="dashboard/live-sessions" element={<LiveVideoSection />} />
 
           {/* Route only for Instructors */}
           {user?.accountType === ACCOUNT_TYPE.INSTRUCTOR && (
