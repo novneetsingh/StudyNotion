@@ -6,14 +6,20 @@ import axios from "axios";
 import { formatDate } from "../../../../utils/formatDate";
 import { copyToClipboard } from "../../../../utils/copyToClipboard";
 import EditNoteModal from "./EditNoteModal";
+import { setNotes } from "../../../../redux-toolkit/slices/notesSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-const NotesCard = ({ note, fetchNotes }) => {
+const NotesCard = ({ note }) => {
+  const dispatch = useDispatch();
+  const { notes } = useSelector((state) => state.notes); // Get the current notes from the Redux store
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const handleDelete = async () => {
     try {
       await axios.delete(`/notes/delete-note/${note._id}`);
-      fetchNotes(); // Refresh notes after deletion
+
+      // Filter out the deleted note from current notes
+      dispatch(setNotes(notes.filter((n) => n._id !== note._id))); // Dispatch the new array directly
     } catch (error) {
       console.error("Error deleting note:", error);
       toast.error("Failed to delete note");
@@ -76,7 +82,6 @@ const NotesCard = ({ note, fetchNotes }) => {
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
           note={note}
-          fetchNotes={fetchNotes}
         />
       )}
     </div>

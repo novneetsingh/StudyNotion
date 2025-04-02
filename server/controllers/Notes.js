@@ -103,7 +103,7 @@ exports.updateNote = async (req, res) => {
 
     res.status(200).json({
       message: "Note updated successfully",
-      note,
+      updatedNote: note,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

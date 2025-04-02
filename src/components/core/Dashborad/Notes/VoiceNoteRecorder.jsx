@@ -8,14 +8,16 @@ import {
 } from "react-icons/ai";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useVoiceRecorder } from "../../../../hooks/voiceRecorder";
+import { useVoiceRecorder } from "react-audio-transcriber-hook";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "../../../../redux-toolkit/slices/profileSlice";
+import { setNotes } from "../../../../redux-toolkit/slices/notesSlice";
 
-const VoiceNoteRecorder = ({ fetchNotes }) => {
+const VoiceNoteRecorder = () => {
   const dispatch = useDispatch();
   const { register, handleSubmit, reset } = useForm();
   const { loading } = useSelector((state) => state.profile);
+  const { notes } = useSelector((state) => state.notes);
 
   const {
     isRecording,
@@ -46,14 +48,15 @@ const VoiceNoteRecorder = ({ fetchNotes }) => {
       formData.append("transcribedText", transcribedText || "");
       formData.append("audio", audioBlob, "recording.webm");
 
-      await axios.post(`/notes/create-note`, formData, {
+      const res = await axios.post(`/notes/create-note`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      handleReset();
-      fetchNotes();
+      handleReset(); // Reset the recorder and form
+      // add the new note to the Redux store
+      dispatch(setNotes([...notes, res.data.newNote]));
     } catch (error) {
       console.error("Error creating note:", error);
       toast.error("Failed to create note");

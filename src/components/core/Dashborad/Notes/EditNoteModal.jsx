@@ -5,8 +5,9 @@ import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "../../../../redux-toolkit/slices/profileSlice";
+import { setNotes } from "../../../../redux-toolkit/slices/notesSlice";
 
-const EditNoteModal = ({ note, isOpen, onClose, fetchNotes }) => {
+const EditNoteModal = ({ note, isOpen, onClose }) => {
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm({
     defaultValues: {
@@ -17,6 +18,7 @@ const EditNoteModal = ({ note, isOpen, onClose, fetchNotes }) => {
 
   const [selectedImages, setSelectedImages] = useState([]);
   const { loading } = useSelector((state) => state.profile);
+  const { notes } = useSelector((state) => state.notes);
 
   // Handle file selection for images
   const handleImageUpload = (e) => {
@@ -35,14 +37,20 @@ const EditNoteModal = ({ note, isOpen, onClose, fetchNotes }) => {
     });
 
     try {
-      await axios.put(`/notes/update-note/${note._id}`, formData, {
+      const res = await axios.put(`/notes/update-note/${note._id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      onClose();
-      fetchNotes();
+      onClose(); // Close the modal after successful update
+
+      // find note having same id and update it
+      const updatedNotes = notes.map((n) =>
+        n._id === note._id ? res.data.updatedNote : n
+      );
+
+      dispatch(setNotes(updatedNotes)); // Update the notes in the Redux store
     } catch (error) {
       console.error("Error updating note:", error);
       toast.error("Failed to update note");
