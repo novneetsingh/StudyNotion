@@ -11,7 +11,7 @@ import axios from "axios";
 import { buyCourse } from "../services/coursePayment";
 import { toast } from "react-hot-toast";
 import { ACCOUNT_TYPE } from "../utils/constants";
-import CourseContent from "../components/Common/courseContent";
+import CourseContent from "../components/Common/CourseContent";
 
 function CourseDetails() {
   const { user } = useSelector((state) => state.profile);
