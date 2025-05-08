@@ -11,6 +11,7 @@ import axios from "axios";
 import { buyCourse } from "../services/coursePayment";
 import { toast } from "react-hot-toast";
 import { ACCOUNT_TYPE } from "../utils/constants";
+import CourseContent from "../components/Common/courseContent";
 
 function CourseDetails() {
   const { user } = useSelector((state) => state.profile);
@@ -135,6 +136,9 @@ function CourseDetails() {
         </div>
       </div>
       <div className="mx-auto box-content px-4 py-20 text-start text-richblack-5 lg:w-[1260px]"></div>
+
+      {/* Course Content */}
+      <CourseContent />
 
       <Footer />
 

@@ -6,6 +6,11 @@ const cookieParser = require("cookie-parser");
 const fileUpload = require("express-fileupload");
 const http = require("http");
 const server = http.createServer(app);
+const helmet = require("helmet");
+const hpp = require("hpp");
+const rateLimit = require("express-rate-limit");
+const mongoSanitize = require("express-mongo-sanitize");
+const xss = require("xss");
 
 // Import routes
 const userRoutes = require("./routes/User");
@@ -35,6 +40,43 @@ app.use(
   fileUpload({
     useTempFiles: true,
     tempFileDir: "/tmp/", // Temporary directory for file uploads
+  })
+);
+
+// Middleware to secure the headers
+app.use(helmet());
+
+// Middleware to prevent parameter pollution
+app.use(hpp());
+
+// Middleware to sanitize the data
+app.use((req, res, next) => {
+  req.body = mongoSanitize.sanitize(req.body); // Sanitize only req.body
+  next();
+});
+
+// Middleware to sanitize the data from xss attacks
+app.use((req, res, next) => {
+  if (req.body) {
+    for (const key in req.body) {
+      req.body[key] = xss(req.body[key]); // Sanitizing each body field
+    }
+  }
+
+  if (req.query) {
+    for (const key in req.query) {
+      req.query[key] = xss(req.query[key]); // Sanitizing each query param
+    }
+  }
+
+  next();
+});
+
+// Middleware to limit the number of requests
+app.use(
+  rateLimit({
+    windowMs: 10 * 60 * 1000, // 10 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
   })
 );
 
